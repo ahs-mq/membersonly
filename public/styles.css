@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.message {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #fff;
+}
+
+.title {
+  font-weight: bold;
+  color: #333;
+}
+
+.timestamp {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+#add {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding-bottom: 10px;
+}
