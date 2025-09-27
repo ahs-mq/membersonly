@@ -11,8 +11,8 @@ exports.getHome = async (req, res) => {
     // If user is logged in, check their membership
     let member = false;
     if (req.user) {
-      const match = messages.find(msg => msg.user_id === req.user.id);
-      member = match?.membership || false;
+    const { rows } = await pool.query("SELECT membership FROM users WHERE id = $1", [req.user.id]);
+    member = rows[0]?.membership || false;
     }
 
     res.render("index", { user: req.user, data: messages, anon: member });
