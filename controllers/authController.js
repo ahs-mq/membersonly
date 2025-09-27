@@ -1,5 +1,6 @@
 const pool = require("../db/pool");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 exports.getLogin = (req, res) => res.render("log-in", { user: req.user });
 
