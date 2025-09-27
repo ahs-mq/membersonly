@@ -3,38 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home</title>
+  <title>Members Only</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <h1>Home</h1>
-  <h2>Messages</h2>
+  <header>
+    <h1>Members Only 👀</h1>
 
-  <% data.forEach(row => { %>
-    <div class="message">
-      <h2 class="title">
-        <%= anon ? row.title : "Anon" %>
-      </h2>
-      <p class="text"><%= row.body %></p>
-      <p class="timestamp"><%= row.timestamp %></p>
-    </div>
-  <% }) %>
+    <% if (!user) { %>
+      <p>You are not logged in. Please <a href="/log-in">log in</a> to access member content.</p>
+    <% } else if (anon) { %>
+      <p>Welcome to the Club</p>
+    <% } else { %>
+      <p>You are logged in but not authenticated. Please enter the secret passcode <a href="/auth">Here</a></p>
+    <% } %>
+  </header>
 
-  <% if (!user) { %>
-    <p>Login to insert message</p>
-  <% } else { %>
-    <form method="post" action="/addmsg">
-      <label for="title">Title</label>
-      <input type="text" name="title" id="title" placeholder="title" required />
+  <main>
+    <h2>Messages</h2>
 
-      <label for="msg">Message</label>
-      <input type="text" name="msg" id="msg" placeholder="Your Message" required />
+    <% data.forEach(row => { %>
+      <div class="message">
+        <h2 class="title">
+          <%= row.membership ? `${row.first_name} ${row.last_name}` : "Anon" %>
+        </h2>
+        <p class="text"><%= row.body %></p>
+        <p class="timestamp"><%= new Date(row.timestamp).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }) %></p>
+      </div>
+    <% }) %>
 
-      <button type="submit">Submit</button>
-    </form>
+    <% if (user) { %>
+      <form id="add" method="post" action="/addmsg">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" placeholder="title" required />
 
-    <form method="get" action="/log-out">
-      <button type="submit">Log out</button>
-    </form>
-  <% } %>
+        <label for="msg">Message</label>
+        <input type="text" name="msg" id="msg" placeholder="Your Message" required />
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <form method="get" action="/log-out">
+        <button type="submit">Log out</button>
+      </form>
+    <% } %>
+  </main>
 </body>
 </html>

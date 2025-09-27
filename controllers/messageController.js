@@ -2,15 +2,19 @@ const pool = require("../db/pool");
 
 exports.getHome = async (req, res) => {
   try {
-    //failsafe if user logged out
+    const { rows: messages } = await pool.query(`
+      SELECT messages.*, users.first_name, users.last_name, users.membership
+      FROM messages
+      JOIN users ON messages.user_id = users.id
+    `);
+
+    // If user is logged in, check their membership
     let member = false;
-    //check if logged in user bool value
     if (req.user) {
-      const { rows } = await pool.query("SELECT membership FROM users WHERE id = $1", [req.user.id]);
-      member = rows[0]?.membership || false;
+      const match = messages.find(msg => msg.user_id === req.user.id);
+      member = match?.membership || false;
     }
 
-    const { rows: messages } = await pool.query("SELECT * FROM messages");
     res.render("index", { user: req.user, data: messages, anon: member });
   } catch (err) {
     console.log("Homepage error:", err);
